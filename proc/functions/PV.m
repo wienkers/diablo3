@@ -22,36 +22,4 @@ q_vort = (om_z + 1/(RoDelta)).*dzB;
 q = q_BC + q_vort; %om_x.*dxB + (om_z + 1/(RoDelta)).*dzB;
 
 
-
-% [X,Z] = ndgrid(dx*[1:size(v,1)], cumsum(dzf));
-% rdbu = flipud(cbrewer('div', 'RdBu', 128));
-% figure()
-% pcolor(X,Z,om_x); shading flat;
-% colourbar('$\omega_x$',rdbu,'Centred');
-% ylim([-0.01,0.04])
-% xlabel('$x$')
-% ylabel('$z$')
-% 
-% figure()
-% pcolor(X,Z,om_z); shading flat;
-% colourbar('$\omega_z$',rdbu,'Centred');
-% ylim([-0.01,0.04])
-% xlabel('$x$')
-% ylabel('$z$')
-% 
-% figure()
-% pcolor(X,Z,dxB); shading flat;
-% colourbar('$\partial_x b$',rdbu,'Centred');
-% ylim([-0.01,0.04])
-% xlabel('$x$')
-% ylabel('$z$')
-% 
-% figure()
-% pcolor(X,Z,dzB); shading flat;
-% colourbar('$\partial_z b$',rdbu,'Centred');
-% ylim([-0.01,0.04])
-% xlabel('$x$')
-% ylabel('$z$')
-
-
 end

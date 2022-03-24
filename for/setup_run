@@ -5,8 +5,6 @@ NPz=$1
 NPy=$2
 
 rundir=`pwd`
-#codedir=/Users/Wienkers/Documents/Education/University_of_Cambridge/Research/diablo3/for
-#codedir=/home/aw670/Research/diablo3/for
 codedir=/home/aw670/diablo3/for
 
 

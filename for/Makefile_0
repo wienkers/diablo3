@@ -8,14 +8,10 @@ COMPILER = ifort
 TARGET_ARCH = #-xMIC-AVX512
 
 # Libraries to Link
-#LDFLAGS = -L/usr/local/fftw/lib   # Terra
-#LDFLAGS = -L/usr/lib/   # DAMTP Computers
-LDFLAGS =   # Fawcett
+LDFLAGS =
 
 # Include Directories
-#INCLUDES = -I/usr/local/fftw/include -I/usr/local/openmpi/include   # Terra
-#INCLUDES = -I/usr/include   # DAMTP Computers
-INCLUDES =   # Fawcett
+INCLUDES =
 
 # Compiler Options
 FCFLAGS = -O3 -ipo -xHost   # HPC
