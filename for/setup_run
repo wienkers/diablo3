@@ -1,0 +1,40 @@
+# !/bin/bash
+
+# Input: Number of Processors
+NPz=$1
+NPy=$2
+
+rundir=`pwd`
+#codedir=/Users/Wienkers/Documents/Education/University_of_Cambridge/Research/diablo3/for
+#codedir=/home/aw670/Research/diablo3/for
+codedir=/home/aw670/diablo3/for
+
+
+# Copy grid files from run dir
+mkdir $rundir/build
+cd $rundir/build/
+cp $codedir/* ./
+cp $rundir/grid_def.all ./
+cp $rundir/grid.h5 ./
+
+# Generate grid header files
+bash make_headers $NPz $NPy
+
+# Copy Custom Makefile, if present
+if test -f "${rundir}/Makefile"; then
+  cp $rundir/Makefile ./
+else
+  cp ./Makefile_0 ./Makefile
+fi
+
+# Compile the code (in build)
+make clean
+make -j4
+
+# Copy the executable back to the run dir
+cp diablo $rundir
+cd $rundir
+rm -r $rundir/build
+
+# Run diablo
+#mpirun -np $((NPz*NPy)) diablo > output.dat &

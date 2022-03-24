@@ -1,0 +1,30 @@
+# !/bin/bash
+
+# Input: Number of Processors in NON-CODE Coordinates ($1)
+NPz=$1
+NPy=$2
+
+rm -f grid_def
+rm -f grid_mpi
+
+
+Nx=$( sed '2 s/[^0-9]*//g p;d' grid_def.all )
+Ny=$( sed '3 s/[^0-9]*//g p;d' grid_def.all )
+Nz=$( sed '4 s/[^0-9]*//g p;d' grid_def.all )
+Nth=$( sed '5 s/[^0-9]*//g p;d' grid_def.all )
+
+
+printf 'parameter(N%s=%d)\n'  'X' $Nx \
+                              'Y' $Nz \
+                              'Z' $Ny \
+                              '_TH' $Nth \
+       >> grid_def
+
+
+
+
+# Modify to change the processor loading (3D)
+printf 'parameter(Nproc%s=%d)\n'    'S' $((NPy*NPz)) \
+                                    'Y' $NPz \
+                                    'Z' $NPy  \
+       >> grid_mpi

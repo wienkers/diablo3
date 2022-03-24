@@ -1,0 +1,5 @@
+# Full Grid Resolution
+Nx  = 4096
+Ny  = 256
+Nz  = 65
+Nth = 1

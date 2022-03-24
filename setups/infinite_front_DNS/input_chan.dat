@@ -1,0 +1,37 @@
+C A data file for diablo.  This is a generic, easy method of data
+C input, as long as you don't change the number of comment lines.
+C Note that the grid size is defined in the file grid_def.all
+C VERSION
+   3.2
+C TIME_AD_METH
+      1
+C LES:    LES_MODEL_TYPE
+           1
+C ICs:	  IC_TYPE,     KICK,     PHYSICAL_NOISE
+           4           1.D-5      .TRUE.
+C Rotation:  RO (or inverse Coriolis parameter, f)
+             50.0
+C Aspect Ratio: DELTA
+                1.0
+C Upward vertical vector components, GRAV_X, GRAV_Y, GRAV_Z
+                                      0.0     0.0     1.0
+C Forcing:      F_TYPE,   UBULK0,   PX0,    OMEGA0,   AMP_OMEGA0
+                  3         0.0     0.0      0.0        0.0
+C BCs in vertical (Z Direction):  0=Dirichlet, 1=Neumann
+C     u_BC_Zmin,  u_BC_Zmin_C1
+      1           0.0
+C     v_BC_Zmin,  v_BC_Zmin_C1
+      1           0.0
+C     w_BC_Zmin,  w_BC_Zmin_C1
+      0           0.0
+C     u_BC_Zmax,  u_BC_Zmax_C1
+      1           0.0
+C     v_BC_Zmax,  v_BC_Zmax_C1
+      1           0.0
+C     w_BC_Zmax,  w_BC_Zmax_C1
+      0           0.0
+C Here include 6*N_TH lines, see below for format
+C     TH_BC_Zmin(1),  TH_BC_Zmin_C1(1)
+      1               0.0
+C     TH_BC_Zmax(1),  TH_BC_Zmax_C1(1)
+      1               0.0
