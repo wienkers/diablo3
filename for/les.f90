@@ -1474,7 +1474,7 @@ end
   end do
 
   ! Need to communicate down CSij2 to each j = Nyp + 1
-  call ghost_CSij2_mpi
+  call ghost_CS2_mpi(CSij2)
 
 
   call fft_xz_to_physical(CSij1, Sij1)
@@ -1514,12 +1514,14 @@ end
     do k = 0, twoNkz
       do i = 0, Nxp - 1
         CSIij1(i, k, j) = cikx(i) * cu1(i, k, j)
-        CSIij2(i, k, j) = (cu2(i, k, j + 1) - cu2(i, k, j)) / dyf(j)
         CSIij3(i, k, j) = cikz(k)*cu3(i, k, j)
         CSIij5(i, k, j) = 0.5d0*(cikz(k) * cu1(i, k, j) &
                            * (deltaz / deltax) &
                            + cikx(i) * cu3(i, k, j) &
                              * (deltax / deltaz) )
+        if (j /= Nyp + 1) then
+          CSIij2(i, k, j) = (cu2(i, k, j + 1) - cu2(i, k, j)) / dyf(j)
+        end if
       end do
     end do
   end do
@@ -1539,8 +1541,8 @@ end
     end do
   end do
 
-  ! Need to communicate down CSij2 to each j = Nyp + 1
-  !call ghost_CSij2_mpi
+  ! Need to communicate down CSIij2 to each j = Nyp + 1
+  call ghost_CS2_mpi(CSIij2)
 
   call fft_xz_to_physical(CSIij1, SIij1)
   call fft_xz_to_physical(CSIij2, SIij2)
@@ -2418,7 +2420,7 @@ end
 
 
 !----*|--.---------.---------.---------.---------.---------.---------.-|-------|
-  subroutine ghost_CSij2_mpi
+  subroutine ghost_CS2_mpi(CS2)
   !----*|--.---------.---------.---------.---------.---------.---------.-|-------|
   ! This subroutine is part of the MPI package for the LES subroutine
   ! to compute the strain
@@ -2426,6 +2428,7 @@ end
 
 
   integer i, j, k, n
+  complex(rkind), intent(inout) :: CS2(:,:,:) ! Can be CSij2 or CSIij2
 
   ! Define the arrays that will be used for data packing.  This makes the
   ! communication between processes more efficient by only requiring one
@@ -2446,18 +2449,18 @@ end
       ! If we are the higest ranked process, then we don't need to recieve
       ! data at the upper ghost cells.
 
-      ! Set CSij2 (cu2(i, k, Nyp + 2) - cu2(i, k, Nyp + 1)) / dyf(Nyp + 1)
-      ! We don't need CSij2 at the boundaries (dictates CSij4' & 6' only)
+      ! Set CS2 (cu2(i, k, Nyp + 2) - cu2(i, k, Nyp + 1)) / dyf(Nyp + 1)
+      ! We don't need CS2 at the boundaries (dictates CSij4' & 6' only)
       do k = 0, twoNkz
         do i = 0, Nxp - 1
-          CSij2(i, k, Nyp + 1) = -10000.d0
+          CS2(i, k, Nyp + 1) = -10000.d0
         end do
       end do
 
       ! Now, send data down the chain
       do k = 0, twoNkz
         do i = 0, Nxp - 1
-          ocpack(i, k) = CSij2(i, k, 2)
+          ocpack(i, k) = CS2(i, k, 2)
         end do
       end do
       ! Now, we have packed the data into a compact array, pass the data up
@@ -2469,7 +2472,7 @@ end
       ! down and recieve data from above us
       do k = 0, twoNkz
         do i = 0, Nxp - 1
-          ocpack(i, k) = CSij2(i, k, 2)
+          ocpack(i, k) = CS2(i, k, 2)
         end do
       end do
 
@@ -2483,7 +2486,7 @@ end
       ! Now, unpack the data that we have recieved
       do k = 0, twoNkz
         do i = 0, Nxp - 1
-          CSij2(i, k, Nyp + 1) = icpack(i, k)
+          CS2(i, k, Nyp + 1) = icpack(i, k)
         end do
       end do
     else
@@ -2495,17 +2498,17 @@ end
       ! Unpack the data that we have recieved
       do k = 0, twoNkz
         do i = 0, Nxp - 1
-          CSij2(i, k, Nyp + 1) = icpack(i, k)
+          CS2(i, k, Nyp + 1) = icpack(i, k)
         end do
       end do
     end if
 
   else
     ! Here, NprocY=1, so we just need to set the boundary values
-    ! Set CSij2 (cu2(i, k, Nyp + 2) - cu2(i, k, Nyp + 1)) / dyf(Nyp + 1)
+    ! Set CS2 (cu2(i, k, Nyp + 2) - cu2(i, k, Nyp + 1)) / dyf(Nyp + 1)
     do k = 0, twoNkz
       do i = 0, Nxp - 1
-        CSij2(i, k, Nyp + 1) = -10000.d0
+        CS2(i, k, Nyp + 1) = -10000.d0
       end do
     end do
 
