@@ -1866,7 +1866,7 @@ subroutine Bin_Ystar_and_Write(gname, field)
   ! AFW 2021
 
   character(len=20) gname
-  real(rkind), intent(in) :: field(:,:,:)
+  real(rkind), pointer, intent(in) :: field(:,:,:)
 
   character(len=35) fname
   integer i, j, k, bin
